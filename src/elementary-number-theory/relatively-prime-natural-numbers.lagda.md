@@ -5,19 +5,18 @@ title: Relatively prime natural numbers
 ```agda
 module elementary-number-theory.relatively-prime-natural-numbers where
 
-open import elementary-number-theory.equality-natural-numbers using
-  ( is-decidable-is-one-ℕ)
+open import elementary-number-theory.addition-natural-numbers
+open import elementary-number-theory.divisibility-natural-numbers
+open import elementary-number-theory.equality-natural-numbers
 open import elementary-number-theory.greatest-common-divisor-natural-numbers
-  using (gcd-ℕ)
-open import elementary-number-theory.natural-numbers using
-  ( ℕ; zero-ℕ; succ-ℕ; is-one-ℕ; is-set-ℕ)
+open import elementary-number-theory.natural-numbers
 
-open import foundation.decidable-propositions using
-  ( is-decidable-prop)
-open import foundation.decidable-types using (is-decidable)
-open import foundation.dependent-pair-types using (Σ; pair; pr1; pr2)
-open import foundation.propositions using (is-prop; Prop)
-open import foundation.universe-levels using (UU; lzero)
+open import foundation.decidable-propositions
+open import foundation.decidable-types
+open import foundation.dependent-pair-types
+open import foundation.identity-types
+open import foundation.propositions
+open import foundation.universe-levels
 ```
 
 ## Idea
@@ -59,9 +58,33 @@ pr2 (is-decidable-prop-relatively-prime-ℕ x y) =
   is-decidable-relatively-prime-ℕ x y
 ```
 
-### A number y is relatively prime to x if and only if `[y] mod x` is a unit in `ℤ-Mod x`
+### For any two natural numbers `a` and `b` such that `a + b ≠ 0`, the numbers `a/gcd(a,b)` and `b/gcd(a,b)` are relatively prime
 
 ```agda
--- relatively-prime-is-unit-mod-ℕ :
---   (x y : ℕ) → is-unit-ℤ-Mod x (mod-ℕ y) → relatively-prime-ℕ x y
--- relatively-prime-is-unit-mod-ℕ x y H = ?
+relatively-prime-quotient-div-gcd-ℕ :
+  (a b : ℕ) → is-nonzero-ℕ (add-ℕ a b) →
+  relatively-prime-ℕ
+    ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
+    ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b))
+relatively-prime-quotient-div-gcd-ℕ a b nz =
+  ( uniqueness-is-gcd-ℕ
+    ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
+    ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b))
+    ( gcd-ℕ
+      ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
+      ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b)))
+    ( quotient-div-ℕ
+      ( gcd-ℕ a b)
+      ( gcd-ℕ a b)
+      ( div-gcd-is-common-divisor-ℕ (is-common-divisor-gcd-ℕ a b)))
+    ( is-gcd-gcd-ℕ
+      ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
+      ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b)))
+    ( is-gcd-quotient-div-gcd-ℕ
+      ( is-nonzero-gcd-ℕ a b nz)
+      ( is-common-divisor-gcd-ℕ a b ))) ∙
+  ( is-idempotent-quotient-div-ℕ
+    ( gcd-ℕ a b)
+    ( is-nonzero-gcd-ℕ a b nz)
+    ( div-gcd-is-common-divisor-ℕ (is-common-divisor-gcd-ℕ a b)))
+```

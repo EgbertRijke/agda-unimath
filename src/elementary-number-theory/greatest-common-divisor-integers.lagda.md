@@ -7,35 +7,34 @@ title: The greatest common divisor of integers
 
 module elementary-number-theory.greatest-common-divisor-integers where
 
-open import elementary-number-theory.absolute-value-integers using
-  ( abs-ℤ; int-abs-ℤ; is-nonzero-abs-ℤ; abs-int-ℕ; eq-abs-ℤ)
-open import elementary-number-theory.addition-natural-numbers using
-  ( add-ℕ; is-zero-left-is-zero-add-ℕ; is-zero-right-is-zero-add-ℕ)
-open import elementary-number-theory.divisibility-integers using
-  ( div-ℤ; div-int-div-ℕ; div-div-int-ℕ; sim-unit-ℤ; div-sim-unit-ℤ;
-    symm-sim-unit-ℤ; refl-sim-unit-ℤ; div-int-abs-div-ℤ; div-div-int-abs-ℤ;
-    sim-unit-abs-ℤ; refl-div-ℤ; is-zero-is-zero-div-ℤ)
-open import
-  elementary-number-theory.greatest-common-divisor-natural-numbers using
-  ( is-common-divisor-ℕ; is-gcd-ℕ; gcd-ℕ; is-gcd-gcd-ℕ; is-nonzero-gcd-ℕ;
-    is-commutative-gcd-ℕ; is-zero-gcd-zero-zero-ℕ; is-zero-add-is-zero-gcd-ℕ)
-open import elementary-number-theory.integers using
-  ( ℤ; is-nonnegative-ℤ; int-ℕ; is-nonnegative-int-ℕ; nonnegative-ℤ;
-    is-positive-ℤ; is-positive-int-ℕ; is-zero-ℤ)
-open import elementary-number-theory.natural-numbers using
-  ( ℕ; is-zero-ℕ; zero-ℕ)
+open import elementary-number-theory.absolute-value-integers
+open import elementary-number-theory.addition-natural-numbers
+open import elementary-number-theory.divisibility-integers
+open import elementary-number-theory.greatest-common-divisor-natural-numbers
+open import elementary-number-theory.integers
+open import elementary-number-theory.natural-numbers
 
-open import foundation.cartesian-product-types using (_×_)
-open import foundation.coproduct-types using (_+_; inl; inr)
-open import foundation.dependent-pair-types using (pair; pr1; pr2)
-open import foundation.functions using (_∘_)
-open import foundation.functoriality-cartesian-product-types using (map-prod)
-open import foundation.identity-types using (_＝_; ap; refl; _∙_; inv)
-open import foundation.logical-equivalences using (_↔_)
-open import foundation.universe-levels using (UU; lzero)
+open import foundation.cartesian-product-types
+open import foundation.coproduct-types
+open import foundation.dependent-pair-types
+open import foundation.functions
+open import foundation.functoriality-cartesian-product-types
+open import foundation.identity-types
+open import foundation.logical-equivalences
+open import foundation.universe-levels
 ```
 
-# Greatest common divisors of integers
+## Idea
+
+The greatest common divisor of two integers `x` and `y` is a nonnegative integer `d` such that
+
+```md
+  (z : ℤ) → is-common-divisor-ℤ x y z ↔ div-ℤ d z
+```
+
+## Definition
+
+### The predicate `is-gcd-ℤ`
 
 ```agda
 is-common-divisor-ℤ : ℤ → ℤ → ℤ → UU lzero
@@ -44,9 +43,23 @@ is-common-divisor-ℤ x y d = (div-ℤ d x) × (div-ℤ d y)
 is-gcd-ℤ : ℤ → ℤ → ℤ → UU lzero
 is-gcd-ℤ x y d =
   is-nonnegative-ℤ d × ((k : ℤ) → is-common-divisor-ℤ x y k ↔ div-ℤ k d)
+```
 
--- We relate divisibility and being a gcd on ℕ and on ℤ
+### The greatest common divisor of two integers
 
+```agda
+nat-gcd-ℤ : ℤ → ℤ → ℕ
+nat-gcd-ℤ x y = gcd-ℕ (abs-ℤ x) (abs-ℤ y)
+
+gcd-ℤ : ℤ → ℤ → ℤ
+gcd-ℤ x y = int-ℕ (nat-gcd-ℤ x y)
+```
+
+## Properties
+
+### A natural number `d` is a common divisor of two natural numbers `x` and `y` if and only if `int-ℕ d` is a common divisor of `int-ℕ x` and `ind-ℕ y`
+
+```agda
 is-common-divisor-int-is-common-divisor-ℕ :
   {x y d : ℕ} →
   is-common-divisor-ℕ x y d → is-common-divisor-ℤ (int-ℕ x) (int-ℕ y) (int-ℕ d)
@@ -58,13 +71,21 @@ is-common-divisor-is-common-divisor-int-ℕ :
   is-common-divisor-ℤ (int-ℕ x) (int-ℕ y) (int-ℕ d) → is-common-divisor-ℕ x y d
 is-common-divisor-is-common-divisor-int-ℕ {x} {y} {d} =
   map-prod div-div-int-ℕ div-div-int-ℕ
+```
 
+### If `ux ＝ x'` and `vy ＝ y'` for two units `u` and `v`, then `d` is a common divisor of `x` and `y` if and only if `d` is a common divisor of `x'` and `y'`
+
+```agda
 is-common-divisor-sim-unit-ℤ :
   {x x' y y' d d' : ℤ} → sim-unit-ℤ x x' → sim-unit-ℤ y y' → sim-unit-ℤ d d' →
   is-common-divisor-ℤ x y d → is-common-divisor-ℤ x' y' d'
 is-common-divisor-sim-unit-ℤ H K L =
   map-prod (div-sim-unit-ℤ L H) (div-sim-unit-ℤ L K)
+```
 
+### If `ux ＝ x'` and `vy ＝ y'` for two units `u` and `v`, then `d` is a greatest common divisor of `x` and `y` if and only if `c` is a greatest common divisor of `x'` and `y'`
+
+```agda
 is-gcd-sim-unit-ℤ :
   {x x' y y' d : ℤ} → sim-unit-ℤ x x' → sim-unit-ℤ y y' →
   is-gcd-ℤ x y d → is-gcd-ℤ x' y' d
@@ -78,7 +99,11 @@ pr1 (pr2 (is-gcd-sim-unit-ℤ H K (pair _ G)) k) =
 pr2 (pr2 (is-gcd-sim-unit-ℤ H K (pair _ G)) k) =
   ( is-common-divisor-sim-unit-ℤ H K (refl-sim-unit-ℤ k)) ∘
   ( pr2 (G k))
+```
 
+### An integer `d` is a common divisor of `x` and `y` if and only if `|d|` is a common divisor of `x` and `y`
+
+```agda
 is-common-divisor-int-abs-is-common-divisor-ℤ :
   {x y d : ℤ} →
   is-common-divisor-ℤ x y d → is-common-divisor-ℤ x y (int-abs-ℤ d)
@@ -90,7 +115,11 @@ is-common-divisor-is-common-divisor-int-abs-ℤ :
   is-common-divisor-ℤ x y (int-abs-ℤ d) → is-common-divisor-ℤ x y d
 is-common-divisor-is-common-divisor-int-abs-ℤ =
   map-prod div-div-int-abs-ℤ div-div-int-abs-ℤ
+```
 
+### A natural number `d` is a greatest common divisor of two natural numbers `x` and `y` if and only if `int-ℕ d` is a greatest common divisor of `int-ℕ x` and `int-ℕ y`
+
+```agda
 is-gcd-int-is-gcd-ℕ :
   {x y d : ℕ} → is-gcd-ℕ x y d → is-gcd-ℤ (int-ℕ x) (int-ℕ y) (int-ℕ d)
 pr1 (is-gcd-int-is-gcd-ℕ {x} {y} {d} H) = is-nonnegative-int-ℕ d
@@ -117,13 +146,11 @@ pr2 (is-gcd-is-gcd-int-ℕ {x} {y} {d} H k) =
   ( ( is-common-divisor-is-common-divisor-int-ℕ) ∘
     ( pr2 (pr2 H (int-ℕ k)))) ∘
   ( div-int-div-ℕ)
+```
 
-nat-gcd-ℤ : ℤ → ℤ → ℕ
-nat-gcd-ℤ x y = gcd-ℕ (abs-ℤ x) (abs-ℤ y)
+### `gcd-ℤ x y` is a greatest common divisor of `x` and `y`
 
-gcd-ℤ : ℤ → ℤ → ℤ
-gcd-ℤ x y = int-ℕ (nat-gcd-ℤ x y)
-
+```agda
 is-nonnegative-gcd-ℤ : (x y : ℤ) → is-nonnegative-ℤ (gcd-ℤ x y)
 is-nonnegative-gcd-ℤ x y = is-nonnegative-int-ℕ (nat-gcd-ℤ x y)
 
@@ -157,7 +184,6 @@ pr2 (pr2 (is-gcd-gcd-ℤ x y) k) =
   ( div-sim-unit-ℤ
     ( symm-sim-unit-ℤ (sim-unit-abs-ℤ k))
     ( refl-sim-unit-ℤ (gcd-ℤ x y)))
-
 ```
 
 ### The gcd of `x` and `y` divides both `x` and `y`
@@ -168,17 +194,25 @@ is-common-divisor-gcd-ℤ :
 is-common-divisor-gcd-ℤ x y =
   pr2 (pr2 (is-gcd-gcd-ℤ x y) (gcd-ℤ x y)) (refl-div-ℤ (gcd-ℤ x y))
 
-div-ℤ-gcd-left : (x y : ℤ) → div-ℤ (gcd-ℤ x y) x
-div-ℤ-gcd-left x y = pr1 (is-common-divisor-gcd-ℤ x y)
+div-left-gcd-ℤ : (x y : ℤ) → div-ℤ (gcd-ℤ x y) x
+div-left-gcd-ℤ x y = pr1 (is-common-divisor-gcd-ℤ x y)
 
-div-ℤ-gcd-right : (x y : ℤ) → div-ℤ (gcd-ℤ x y) y
-div-ℤ-gcd-right x y = pr2 (is-common-divisor-gcd-ℤ x y)
+div-right-gcd-ℤ : (x y : ℤ) → div-ℤ (gcd-ℤ x y) y
+div-right-gcd-ℤ x y = pr2 (is-common-divisor-gcd-ℤ x y)
+```
 
+### Any common divisor of `x` and `y` divides the greatest common divisor
+
+```agda
 div-gcd-is-common-divisor-ℤ :
   (x y k : ℤ) → is-common-divisor-ℤ x y k → div-ℤ k (gcd-ℤ x y)
 div-gcd-is-common-divisor-ℤ x y k H =
   pr1 (pr2 (is-gcd-gcd-ℤ x y) k) H
+```
 
+### If either `x` or `y` is a positive integer, then `gcd-ℤ x y` is positive
+
+```agda
 is-positive-gcd-is-positive-left-ℤ :
   (x y : ℤ) → is-positive-ℤ x → is-positive-ℤ (gcd-ℤ x y)
 is-positive-gcd-is-positive-left-ℤ x y H =
@@ -210,7 +244,11 @@ is-positive-gcd-ℤ :
   is-positive-ℤ (gcd-ℤ x y)
 is-positive-gcd-ℤ x y (inl H) = is-positive-gcd-is-positive-left-ℤ x y H
 is-positive-gcd-ℤ x y (inr H) = is-positive-gcd-is-positive-right-ℤ x y H
+```
 
+### `gcd-ℤ a b` is zero if and only if both `a` and `b` are zero
+
+```agda
 is-zero-gcd-ℤ :
   (a b : ℤ) → is-zero-ℤ a → is-zero-ℤ b → is-zero-ℤ (gcd-ℤ a b)
 is-zero-gcd-ℤ zero-ℤ zero-ℤ refl refl =
@@ -219,13 +257,26 @@ is-zero-gcd-ℤ zero-ℤ zero-ℤ refl refl =
 is-zero-left-is-zero-gcd-ℤ :
   (a b : ℤ) → is-zero-ℤ (gcd-ℤ a b) → is-zero-ℤ a
 is-zero-left-is-zero-gcd-ℤ a b =
-  is-zero-is-zero-div-ℤ a (gcd-ℤ a b) (div-ℤ-gcd-left a b)
+  is-zero-is-zero-div-ℤ a (gcd-ℤ a b) (div-left-gcd-ℤ a b)
 
 is-zero-right-is-zero-gcd-ℤ :
   (a b : ℤ) → is-zero-ℤ (gcd-ℤ a b) → is-zero-ℤ b
 is-zero-right-is-zero-gcd-ℤ a b =
-  is-zero-is-zero-div-ℤ b (gcd-ℤ a b) (div-ℤ-gcd-right a b)
+  is-zero-is-zero-div-ℤ b (gcd-ℤ a b) (div-right-gcd-ℤ a b)
+```
 
+### If either `a` or `b` is nonzero, then `gcd-ℤ a b` is nonzero
+
+```agda
+is-nonzero-gcd-ℤ :
+  (a b : ℤ) → (is-nonzero-ℤ a + is-nonzero-ℤ b) → is-nonzero-ℤ (gcd-ℤ a b)
+is-nonzero-gcd-ℤ a b (inl H) p = H (is-zero-left-is-zero-gcd-ℤ a b p)
+is-nonzero-gcd-ℤ a b (inr H) p = H (is-zero-right-is-zero-gcd-ℤ a b p)
+```
+
+### `gcd-ℤ` is commutative
+
+```agda
 is-commutative-gcd-ℤ : (x y : ℤ) → gcd-ℤ x y ＝ gcd-ℤ y x
 is-commutative-gcd-ℤ x y =
   ap int-ℕ (is-commutative-gcd-ℕ (abs-ℤ x) (abs-ℤ y))

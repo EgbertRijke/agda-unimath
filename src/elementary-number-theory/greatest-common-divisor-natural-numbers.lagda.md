@@ -433,35 +433,3 @@ is-gcd-quotient-div-gcd-ℕ {a} {b} {d} nz H x =
       by
       inv-iff (simplify-div-quotient-div-ℕ nz (div-gcd-is-common-divisor-ℕ H))
 ```
-
-### The greatest common divisor of `a/gcd(a,b)` and `b/gcd(a,b)` is `1`
-
-```agda
-is-one-gcd-quotient-div-gcd-ℕ :
-  (a b : ℕ) → is-nonzero-ℕ (add-ℕ a b) →
-  is-one-ℕ
-    ( gcd-ℕ
-      ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
-      ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b)))
-is-one-gcd-quotient-div-gcd-ℕ a b nz =
-  ( uniqueness-is-gcd-ℕ
-    ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
-    ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b))
-    ( gcd-ℕ
-      ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
-      ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b)))
-    ( quotient-div-ℕ
-      ( gcd-ℕ a b)
-      ( gcd-ℕ a b)
-      ( div-gcd-is-common-divisor-ℕ (is-common-divisor-gcd-ℕ a b)))
-    ( is-gcd-gcd-ℕ
-      ( quotient-div-ℕ (gcd-ℕ a b) a (div-left-gcd-ℕ a b))
-      ( quotient-div-ℕ (gcd-ℕ a b) b (div-right-gcd-ℕ a b)))
-    ( is-gcd-quotient-div-gcd-ℕ
-      ( is-nonzero-gcd-ℕ a b nz)
-      ( is-common-divisor-gcd-ℕ a b ))) ∙
-  ( is-idempotent-quotient-div-ℕ
-    ( gcd-ℕ a b)
-    ( is-nonzero-gcd-ℕ a b nz)
-    ( div-gcd-is-common-divisor-ℕ (is-common-divisor-gcd-ℕ a b)))
-```
