@@ -11,6 +11,7 @@ open import foundation.embeddings
 open import foundation.equational-reasoning
 open import foundation.equivalence-classes
 open import foundation.equivalences
+open import foundation.function-extensionality
 open import foundation.functions
 open import foundation.homotopies
 open import foundation.identity-types
@@ -207,4 +208,20 @@ module _
       ( quotient-Set R)
       ( quotient-map R)
       ( is-surjective-and-effective-quotient-map R)
+
+  elim-set-quotient :
+    {l : Level} (B : Set l) (f : A → type-Set B) →
+    ({x y : A} → sim-Eq-Rel R x y → (f x ＝ f y)) → set-quotient R → type-Set B
+  elim-set-quotient B f H =
+    map-inv-is-equiv (is-set-quotient-set-quotient B) (pair f H)
+
+  compute-elim-set-quotient :
+    {l : Level} (B : Set l) (f : A → type-Set B)
+    (H : {x y : A} → sim-Eq-Rel R x y → (f x ＝ f y)) →
+    (elim-set-quotient B f H ∘ quotient-map R) ~ f
+  compute-elim-set-quotient B f H =
+    htpy-eq
+      ( ap
+        ( pr1)
+        ( issec-map-inv-is-equiv (is-set-quotient-set-quotient B) (pair f H)))
 ```
