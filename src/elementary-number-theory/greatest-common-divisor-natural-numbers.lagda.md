@@ -85,8 +85,8 @@ is-decidable-is-common-divisor-ℕ a b x =
 
 ```agda
 is-common-divisor-is-gcd-ℕ :
-  (a b d : ℕ) → is-gcd-ℕ a b d → is-common-divisor-ℕ a b d
-is-common-divisor-is-gcd-ℕ a b d H = pr2 (H d) (refl-div-ℕ d)
+  {a b d : ℕ} → is-gcd-ℕ a b d → is-common-divisor-ℕ a b d
+is-common-divisor-is-gcd-ℕ {a} {b} {d} H = pr2 (H d) (refl-div-ℕ d)
 ```
 
 ### Uniqueness of greatest common divisors
@@ -96,8 +96,8 @@ uniqueness-is-gcd-ℕ :
   (a b d d' : ℕ) → is-gcd-ℕ a b d → is-gcd-ℕ a b d' → d ＝ d'
 uniqueness-is-gcd-ℕ a b d d' H H' =
   antisymmetric-div-ℕ d d'
-    ( pr1 (H' d) (is-common-divisor-is-gcd-ℕ a b d H))
-    ( pr1 (H d') (is-common-divisor-is-gcd-ℕ a b d' H'))
+    ( pr1 (H' d) (is-common-divisor-is-gcd-ℕ H))
+    ( pr1 (H d') (is-common-divisor-is-gcd-ℕ H'))
 ```
 
 ### If `d` is a common divisor of `a` and `b`, and `a + b ≠ 0`, then `d ≤ a + b`
@@ -358,7 +358,7 @@ reflects-is-common-divisor-mul-ℕ k a b d H =
 ```agda
 is-one-is-gcd-one-ℕ : {b x : ℕ} → is-gcd-ℕ 1 b x → is-one-ℕ x
 is-one-is-gcd-one-ℕ {b} {x} H =
-  is-one-div-one-ℕ x (pr1 (is-common-divisor-is-gcd-ℕ 1 b x H))
+  is-one-div-one-ℕ x (pr1 (is-common-divisor-is-gcd-ℕ H))
 
 is-one-gcd-one-ℕ : (b : ℕ) → is-one-ℕ (gcd-ℕ 1 b)
 is-one-gcd-one-ℕ b = is-one-is-gcd-one-ℕ (is-gcd-gcd-ℕ 1 b)
@@ -369,7 +369,7 @@ is-one-gcd-one-ℕ b = is-one-is-gcd-one-ℕ (is-gcd-gcd-ℕ 1 b)
 ```agda
 is-one-is-gcd-one-ℕ' : {a x : ℕ} → is-gcd-ℕ a 1 x → is-one-ℕ x
 is-one-is-gcd-one-ℕ' {a} {x} H =
-  is-one-div-one-ℕ x (pr2 (is-common-divisor-is-gcd-ℕ a 1 x H))
+  is-one-div-one-ℕ x (pr2 (is-common-divisor-is-gcd-ℕ H))
 
 is-one-gcd-one-ℕ' : (a : ℕ) → is-one-ℕ (gcd-ℕ a 1)
 is-one-gcd-one-ℕ' a = is-one-is-gcd-one-ℕ' (is-gcd-gcd-ℕ a 1)
@@ -432,4 +432,22 @@ is-gcd-quotient-div-gcd-ℕ {a} {b} {d} nz H x =
     ↔ div-ℕ x (quotient-div-ℕ d (gcd-ℕ a b) (div-gcd-is-common-divisor-ℕ H))
       by
       inv-iff (simplify-div-quotient-div-ℕ nz (div-gcd-is-common-divisor-ℕ H))
+```
+
+### `gcd-ℕ 0 b ＝ b`
+
+```agda
+is-id-is-gcd-zero-ℕ : {b x : ℕ} → gcd-ℕ 0 b ＝ x → x ＝ b
+is-id-is-gcd-zero-ℕ {b} {x} refl =
+  antisymmetric-div-ℕ x b 
+    ( pr2 (is-common-divisor-is-gcd-ℕ ( is-gcd-gcd-ℕ 0 b)))
+    ( div-gcd-is-common-divisor-ℕ (pair' (div-zero-ℕ b) (refl-div-ℕ b)))
+```
+
+### `gcd-ℕ a 0 ＝ a`
+
+```agda
+is-id-is-gcd-zero-ℕ' : {a x : ℕ} → gcd-ℕ a 0 ＝ x → x ＝ a
+is-id-is-gcd-zero-ℕ' {a} {x} H =
+  is-id-is-gcd-zero-ℕ ((is-commutative-gcd-ℕ 0 a) ∙ H)
 ```

@@ -15,6 +15,7 @@ open import elementary-number-theory.relatively-prime-natural-numbers
 
 open import foundation.coproduct-types
 open import foundation.identity-types
+open import foundation.propositions
 open import foundation.universe-levels
 ```
 
@@ -25,8 +26,8 @@ Two integers are said to be relatively prime if their greatest common divisor is
 ## Definition
 
 ```agda
-relatively-prime-ℤ : ℤ → ℤ → UU lzero
-relatively-prime-ℤ x y = is-one-ℤ (gcd-ℤ x y)
+relative-prime-ℤ : ℤ → ℤ → UU lzero
+relative-prime-ℤ x y = is-one-ℤ (gcd-ℤ x y)
 ```
 
 ## Properties
@@ -35,11 +36,11 @@ relatively-prime-ℤ x y = is-one-ℤ (gcd-ℤ x y)
 
 ```agda
 relatively-prime-abs-relatively-prime-ℤ :
-  {a b : ℤ} → relatively-prime-ℤ a b → relatively-prime-ℕ (abs-ℤ a) (abs-ℤ b)
+  {a b : ℤ} → relative-prime-ℤ a b → relatively-prime-ℕ (abs-ℤ a) (abs-ℤ b)
 relatively-prime-abs-relatively-prime-ℤ {a} {b} H = is-injective-int-ℕ H
 
 relatively-prime-relatively-prime-abs-ℤ :
-  {a b : ℤ} → relatively-prime-ℕ (abs-ℤ a) (abs-ℤ b) → relatively-prime-ℤ a b
+  {a b : ℤ} → relatively-prime-ℕ (abs-ℤ a) (abs-ℤ b) → relative-prime-ℤ a b
 relatively-prime-relatively-prime-abs-ℤ {a} {b} H = ap int-ℕ H
 ```
 
@@ -48,10 +49,15 @@ relatively-prime-relatively-prime-abs-ℤ {a} {b} H = ap int-ℕ H
 ```agda
 relatively-prime-quotient-div-ℤ :
   {a b : ℤ} → (is-nonzero-ℤ a + is-nonzero-ℤ b) →
-  relatively-prime-ℤ
+  relative-prime-ℤ
     ( quotient-div-ℤ (gcd-ℤ a b) a (div-left-gcd-ℤ a b))
     ( quotient-div-ℤ (gcd-ℤ a b) b (div-right-gcd-ℤ a b))
 relatively-prime-quotient-div-ℤ H =
   relatively-prime-relatively-prime-abs-ℤ
     {!!}
+```
+
+```agda
+is-prop-is-relative-prime-ℤ : (x y : ℤ) → is-prop (relative-prime-ℤ x y)
+is-prop-is-relative-prime-ℤ x y = is-set-ℤ (gcd-ℤ x y) one-ℤ
 ```
