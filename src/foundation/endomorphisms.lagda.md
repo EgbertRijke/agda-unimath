@@ -1,6 +1,4 @@
----
-title: endomorphisms
----
+#  endomorphisms
 
 ```agda
 module foundation.endomorphisms where
@@ -56,4 +54,4 @@ pr2 (pr2 (pr2 (endo-Monoid A))) f = refl
 ## See also
 
 - For endomorphisms in a category see
-  [`category-theory.endomorphisms-of-objects-categories`](category-theory.endomorphisms-of-objects-categories.html).
+  [`category-theory.endomorphisms-of-objects-categories`](category-theory.endomorphisms-of-objects-categories.md).

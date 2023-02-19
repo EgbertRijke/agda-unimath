@@ -1,6 +1,4 @@
----
-title: Adjunctions between large precategories
----
+#  Adjunctions between large precategories
 
 ```agda
 module category-theory.adjunctions-large-precategories where
@@ -9,7 +7,7 @@ open import Agda.Primitive using (Setω)
 open import category-theory.functors-large-precategories
 open import category-theory.large-precategories
 open import category-theory.natural-transformations-large-precategories
-open import foundation.commuting-squares
+open import foundation.commuting-squares-of-maps
 open import foundation.equivalences
 open import foundation.identity-types
 open import foundation.universe-levels
@@ -22,6 +20,7 @@ Let `C` and `D` be two large precategories. Two functors `F : C → D` and `G : 
 such that
 - for every pair of morhpisms `f : X₂ → X₁` and `g : Y₁ → Y₂` the following square commutes:
 
+```md
                        ϕ X₁ Y₁
        hom X₁ (G Y₁) --------> hom (F X₁) Y₁
             |                        |
@@ -30,6 +29,7 @@ G g ∘ _ ∘ f |                        | g ∘ _ ∘ F f
             v                        v
        hom X₂ (G Y₂) --------> hom (F X₂) Y₂
                        ϕ X₂ Y₂
+``` 
 
 In this case we say that `F` is left adjoint to `G` and `G` is right adjoint to `F` and write this as `F ⊣ G`.
 
@@ -55,7 +55,7 @@ module _
         {X2 : obj-Large-Precat C l2} {Y1 : obj-Large-Precat D l3}
         {Y2 : obj-Large-Precat D l4} (f : type-hom-Large-Precat C X2 X1)
         (g : type-hom-Large-Precat D Y1 Y2) →
-        coherence-square
+        coherence-square-maps
           ( map-equiv (equiv-is-adjoint-pair-Large-Precat X1 Y1))
           ( λ h →
             comp-hom-Large-Precat C
@@ -99,7 +99,7 @@ module _
     {X2 : obj-Large-Precat C l2} {Y1 : obj-Large-Precat D l3}
     {Y2 : obj-Large-Precat D l4} (f : type-hom-Large-Precat C X2 X1)
     (g : type-hom-Large-Precat D Y1 Y2) →
-    coherence-square
+    coherence-square-maps
       ( map-inv-equiv-is-adjoint-pair-Large-Precat H X1 Y1)
       ( λ h →
         comp-hom-Large-Precat D
@@ -240,7 +240,7 @@ module _
     {X1 : obj-Large-Precat C l1} {X2 : obj-Large-Precat C l2}
     {Y1 : obj-Large-Precat D l3} {Y2 : obj-Large-Precat D l4}
     (f : type-hom-Large-Precat C X2 X1) (g : type-hom-Large-Precat D Y1 Y2) →
-    coherence-square
+    coherence-square-maps
       ( map-equiv-is-adjoint-pair-Adjunction FG X1 Y1)
       ( λ h →
         comp-hom-Large-Precat C
@@ -276,7 +276,7 @@ module _
     {X1 : obj-Large-Precat C l1} {X2 : obj-Large-Precat C l2}
     {Y1 : obj-Large-Precat D l3} {Y2 : obj-Large-Precat D l4}
     (f : type-hom-Large-Precat C X2 X1) (g : type-hom-Large-Precat D Y1 Y2) →
-    coherence-square
+    coherence-square-maps
       ( map-inv-equiv-is-adjoint-pair-Adjunction FG X1 Y1)
       ( λ h →
         comp-hom-Large-Precat D

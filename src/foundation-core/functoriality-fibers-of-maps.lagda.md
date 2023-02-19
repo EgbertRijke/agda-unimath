@@ -1,6 +1,4 @@
----
-title: The functoriality of `fib`
----
+#  The functoriality of `fib`
 
 ```agda
 module foundation-core.functoriality-fibers-of-maps where
@@ -113,4 +111,4 @@ module _
 ## See also
 
 - Equality proofs in the fiber of a map are characterized in
-  [`foundation.equality-fibers-of-maps`](foundation.equality-fibers-of-maps.html).
+  [`foundation.equality-fibers-of-maps`](foundation.equality-fibers-of-maps.md).

@@ -1,6 +1,4 @@
----
-title: The univalence axiom
----
+#  The univalence axiom
 
 ```agda
 module foundation.univalence where
@@ -23,7 +21,7 @@ open import foundation.equivalences
 
 The univalence axiom characterizes the identity types of universes. It asserts that the map `Id A B → A ≃ B` is an equivalence.
 
-In this file we postulate the univalence axiom. Its statement is defined in [`foundation-core.univalence`](foundation-core.univalence.html).
+In this file we postulate the univalence axiom. Its statement is defined in [`foundation-core.univalence`](foundation-core.univalence.md).
 
 ## Postulates
 
@@ -135,4 +133,14 @@ commutativity-inv-eq-equiv A B f =
         ( ap
           ( λ e → map-equiv e (inv-equiv f))
           ( inv (right-inverse-law-equiv equiv-univalence)))))
+```
+
+### eq-equiv on id is refl
+
+```agda
+refl-eq-equiv-id :
+  {l1 : Level} {A : UU l1} →
+  (eq-equiv A A (id-equiv {A = A})) ＝ refl
+refl-eq-equiv-id =
+  (isretr-map-inv-equiv equiv-univalence) refl   
 ```

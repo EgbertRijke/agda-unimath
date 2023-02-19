@@ -1,6 +1,4 @@
----
-title: Equality of coproduct types
----
+#  Equality of coproduct types
 
 ```agda
 module foundation.equality-coproduct-types where
@@ -324,6 +322,6 @@ pr2 (coprod-Set (pair A is-set-A) (pair B is-set-B)) =
 ## See also
 
 - Equality proofs in coproduct types are characterized in
-  [`foundation.equality-coproduct-types`](foundation.equality-coproduct-types.html).
+  [`foundation.equality-coproduct-types`](foundation.equality-coproduct-types.md).
 - Equality proofs in dependent pair types are characterized in
-  [`foundation.equality-dependent-pair-types`](foundation.equality-dependent-pair-types.html).
+  [`foundation.equality-dependent-pair-types`](foundation.equality-dependent-pair-types.md).

@@ -1,6 +1,4 @@
----
-title: Homotopies
----
+#  Homotopies
 
 ```agda
 {-# OPTIONS --safe #-}
@@ -26,17 +24,23 @@ module _
   eq-value : X → UU l2
   eq-value x = (f x ＝ g x)
 
-  tr-eq-value :
+  map-compute-path-over-eq-value :
     {x y : X} (p : x ＝ y) (q : eq-value x) (r : eq-value y) →
-    ((apd f p) ∙ r) ＝ ((ap (tr P p) q) ∙ (apd g p)) →
-    tr eq-value p q ＝ r
-  tr-eq-value refl q .(ap id q ∙ refl) refl = inv (right-unit ∙ ap-id q)
+    ((apd f p) ∙ r) ＝ ((ap (tr P p) q) ∙ (apd g p)) → tr eq-value p q ＝ r
+  map-compute-path-over-eq-value refl q r =
+    inv ∘ (concat' r (right-unit ∙ ap-id q))
 
-tr-eq-value-id-id :
+map-compute-path-over-eq-value' :
+  {l1 l2 : Level} {X : UU l1} {Y : UU l2} (f g : X → Y) →
+  {x y : X} (p : x ＝ y) (q : eq-value f g x) (r : eq-value f g y) →
+  (ap f p ∙ r) ＝ (q ∙ ap g p) → tr (eq-value f g) p q ＝ r
+map-compute-path-over-eq-value' f g refl q r = inv ∘ concat' r right-unit
+
+map-compute-path-over-eq-value-id-id :
   {l1 : Level} {A : UU l1} →
   {a b : A} (p : a ＝ b) (q : a ＝ a) (r : b ＝ b) →
   (p ∙ r) ＝ (q ∙ p) → (tr (eq-value id id) p q) ＝ r
-tr-eq-value-id-id refl q r s = inv (s ∙ right-unit)
+map-compute-path-over-eq-value-id-id refl q r s = inv (s ∙ right-unit)
 ```
 
 ```agda
@@ -113,12 +117,16 @@ htpy-left-whisk h H x = ap h (H x)
 _·l_ = htpy-left-whisk
 
 htpy-right-whisk :
-  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : UU l3}
-  {g h : B → C} (H : g ~ h) (f : A → B) → (g ∘ f) ~ (h ∘ f)
+  {l1 l2 l3 : Level} {A : UU l1} {B : UU l2} {C : B → UU l3}
+  {g h : (y : B) → C y} (H : g ~ h) (f : A → B) → (g ∘ f) ~ (h ∘ f)
 htpy-right-whisk H f x = H (f x)
 
 _·r_ = htpy-right-whisk
 ```
+
+**Warning**: The infix whiskering operators `_·l_` and `_·r_` use the symbol `·` ("MIDDLE DOT", codepoint #xb7) (agda-input: `\cdot` or `\centerdot`)
+as opposed to the infix homotopy concatenation operator `_∙h_` which uses the symbol `∙` ("BULLET OPERATOR", codepoint #x2219) (agda-input: `\.`).
+If these look the same in your editor, we suggest that you change your font. For a reference, see [How to install](HOWTO-INSTALL.md).
 
 ### Transposition of homotopies
 
@@ -316,6 +324,6 @@ module _
 ## See also
 
 - We postulate that homotopy is equivalent to identity of functions in
-  [`foundation-core.function-extensionality`](foundation-core.function-extensionality.html).
+  [`foundation-core.function-extensionality`](foundation-core.function-extensionality.md).
 - We define an equational reasoning syntax for homotopies in
-  [`foundation.equational-reasoning`](foundation.equational-reasoning.html).
+  [`foundation.equational-reasoning`](foundation.equational-reasoning.md).

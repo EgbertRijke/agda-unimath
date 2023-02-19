@@ -1,6 +1,4 @@
----
-title: Ferrers diagrams (unlabeled partitions)
----
+#  Ferrers diagrams (unlabeled partitions)
 
 ```agda
 module univalent-combinatorics.ferrers-diagrams where
@@ -253,4 +251,4 @@ module _
 
 ## See also
 
-- Integer partitions in [`elementary-number-theory.integer-partitions`](elementary-number-theory.integer-partitions.html)
+- Integer partitions in [`elementary-number-theory.integer-partitions`](elementary-number-theory.integer-partitions.md)

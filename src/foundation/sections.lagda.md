@@ -1,6 +1,4 @@
----
-title: Sections
----
+#  Sections
 
 ```agda
 module foundation.sections where
@@ -181,4 +179,3 @@ pr1 (pr2 (sec-left-factor-retract-of-sec-composition f g h H sec-h)) =
 pr2 (pr2 (sec-left-factor-retract-of-sec-composition f g h H sec-h)) =
   isretr-section-comp-htpy f g h H sec-h
 ```
- 
