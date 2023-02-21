@@ -32,6 +32,13 @@ module _
   type-Involutive-Type = X (standard-2-Element-Type lzero)
 ```
 
+### Orbits of involutive types
+
+```agda
+  orbit-Involutive-Type : UU (lsuc lzero ⊔ l)
+  orbit-Involutive-Type = Σ (2-Element-Type lzero) X
+```
+
 ### Involutive structure on a type
 
 ```agda

@@ -12,6 +12,7 @@ open import foundation.constant-maps
 open import foundation.contractible-maps
 open import foundation.contractible-types
 open import foundation.coproduct-types
+open import foundation.decidable-equality
 open import foundation.decidable-types
 open import foundation.dependent-pair-types
 open import foundation.double-negation
@@ -43,6 +44,7 @@ open import foundation.type-arithmetic-unit-type
 open import foundation.unit-type
 open import foundation.universe-levels
 
+open import univalent-combinatorics.equality-finite-types
 open import univalent-combinatorics.equality-standard-finite-types
 open import univalent-combinatorics.equivalences
 open import univalent-combinatorics.finite-types
@@ -74,22 +76,34 @@ is-prop-has-two-elements {l} {X} = is-prop-type-Prop (has-two-elements-Prop X)
 2-Element-Type : (l : Level) → UU (lsuc l)
 2-Element-Type l = UU-Fin l 2
 
-type-2-Element-Type : {l : Level} → 2-Element-Type l → UU l
-type-2-Element-Type = pr1
+module _
+  {l : Level} (X : 2-Element-Type l)
+  where
+  
+  type-2-Element-Type : UU l
+  type-2-Element-Type = pr1 X
 
-has-two-elements-type-2-Element-Type :
-  {l : Level} (X : 2-Element-Type l) → has-two-elements (type-2-Element-Type X)
-has-two-elements-type-2-Element-Type = pr2
+  has-two-elements-type-2-Element-Type :
+    has-two-elements type-2-Element-Type
+  has-two-elements-type-2-Element-Type = pr2 X
 
-is-finite-type-2-Element-Type :
-  {l : Level} (X : 2-Element-Type l) → is-finite (type-2-Element-Type X)
-is-finite-type-2-Element-Type X =
-  is-finite-has-cardinality 2 (has-two-elements-type-2-Element-Type X)
+  is-finite-type-2-Element-Type : is-finite type-2-Element-Type
+  is-finite-type-2-Element-Type =
+    is-finite-has-cardinality 2 has-two-elements-type-2-Element-Type
 
-finite-type-2-Element-Type : {l : Level} → 2-Element-Type l → 𝔽 l
-pr1 (finite-type-2-Element-Type X) = type-2-Element-Type X
-pr2 (finite-type-2-Element-Type X) = is-finite-type-2-Element-Type X
+  finite-type-2-Element-Type : 𝔽 l
+  pr1 finite-type-2-Element-Type = type-2-Element-Type
+  pr2 finite-type-2-Element-Type = is-finite-type-2-Element-Type
 
+  has-decidable-equality-type-2-Element-Type :
+    has-decidable-equality type-2-Element-Type
+  has-decidable-equality-type-2-Element-Type =
+    has-decidable-equality-is-finite is-finite-type-2-Element-Type
+```
+
+### The standard 2-element type
+
+```agda
 standard-2-Element-Type : (l : Level) → 2-Element-Type l
 standard-2-Element-Type l = Fin-UU-Fin l 2
 
