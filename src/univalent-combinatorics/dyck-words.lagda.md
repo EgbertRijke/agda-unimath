@@ -38,6 +38,6 @@ The number of Dyck words of length `n` is the `n`-th [Catalan number](elementary
 ### Dyck words
 
 ```agda
-is-dyck-word : list (Fin 2) → UU lzero
+data is-dyck-word : list (Fin 2) → UU lzero
 is-dyck-word w = {!!}
 ```
