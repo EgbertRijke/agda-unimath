@@ -14,6 +14,7 @@ open import foundation.identity-types
 open import foundation.sets
 open import foundation.universe-levels
 
+open import group-theory.partial-inverse-elements-semigroups
 open import group-theory.semigroups
 ```
 
@@ -21,22 +22,21 @@ open import group-theory.semigroups
 
 ## Idea
 
-An inverse semigroup is an algebraic structure that models partial bijections.
-In an inverse semigroup, elements have unique inverses in the sense that for
+An {{#concept "inverse semigroup" Agda=Inverse-Semigroup}} is an algebraic
+structure that models partial bijections.
+Inverse semigroups are [semigroups](group-theory.semigroups.md) in which
+elements have unique [inverses](group-theory.inverse-elements-semigroups.md) in the sense that for
 each `x` there is a unique `y` such that `xyx = x` and `yxy = y`.
 
-## Definition
+## Definitions
+
+### Inverse semigroups
 
 ```agda
 is-inverse-Semigroup :
   {l : Level} (S : Semigroup l) → UU l
 is-inverse-Semigroup S =
-  (x : type-Semigroup S) →
-  is-contr
-    ( Σ ( type-Semigroup S)
-        ( λ y →
-          Id (mul-Semigroup S (mul-Semigroup S x y) x) x ×
-          Id (mul-Semigroup S (mul-Semigroup S y x) y) y))
+  (x : type-Semigroup S) → is-contr (partial-inverse-element-Semigroup S x)
 
 Inverse-Semigroup : (l : Level) → UU (lsuc l)
 Inverse-Semigroup l = Σ (Semigroup l) is-inverse-Semigroup
@@ -68,9 +68,8 @@ module _
 
   associative-mul-Inverse-Semigroup :
     (x y z : type-Inverse-Semigroup) →
-    Id
-      ( mul-Inverse-Semigroup (mul-Inverse-Semigroup x y) z)
-      ( mul-Inverse-Semigroup x (mul-Inverse-Semigroup y z))
+    mul-Inverse-Semigroup (mul-Inverse-Semigroup x y) z ＝
+    mul-Inverse-Semigroup x (mul-Inverse-Semigroup y z)
   associative-mul-Inverse-Semigroup =
     associative-mul-Semigroup semigroup-Inverse-Semigroup
 
@@ -78,27 +77,37 @@ module _
     is-inverse-Semigroup semigroup-Inverse-Semigroup
   is-inverse-semigroup-Inverse-Semigroup = pr2 S
 
+  partial-inverse-element-Inverse-Semigroup :
+    (x : type-Inverse-Semigroup) →
+    partial-inverse-element-Semigroup semigroup-Inverse-Semigroup x
+  partial-inverse-element-Inverse-Semigroup x =
+    center (is-inverse-semigroup-Inverse-Semigroup x)
+
   inv-Inverse-Semigroup : type-Inverse-Semigroup → type-Inverse-Semigroup
   inv-Inverse-Semigroup x =
-    pr1 (center (is-inverse-semigroup-Inverse-Semigroup x))
+    element-partial-inverse-element-Semigroup
+      ( semigroup-Inverse-Semigroup)
+      ( partial-inverse-element-Inverse-Semigroup x)
 
-  inner-inverse-law-mul-Inverse-Semigroup :
+  inner-partial-inverse-law-mul-Inverse-Semigroup :
     (x : type-Inverse-Semigroup) →
-    Id
-      ( mul-Inverse-Semigroup
-        ( mul-Inverse-Semigroup x (inv-Inverse-Semigroup x))
-        ( x))
+    inner-partial-inverse-law-Semigroup
+      ( semigroup-Inverse-Semigroup)
       ( x)
-  inner-inverse-law-mul-Inverse-Semigroup x =
-    pr1 (pr2 (center (is-inverse-semigroup-Inverse-Semigroup x)))
+      ( inv-Inverse-Semigroup x)
+  inner-partial-inverse-law-mul-Inverse-Semigroup x =
+    is-inner-partial-inverse-partial-inverse-element-Semigroup
+      ( semigroup-Inverse-Semigroup)
+      ( partial-inverse-element-Inverse-Semigroup x)
 
   outer-inverse-law-mul-Inverse-Semigroup :
     (x : type-Inverse-Semigroup) →
-    Id
-      ( mul-Inverse-Semigroup
-        ( mul-Inverse-Semigroup (inv-Inverse-Semigroup x) x)
-        ( inv-Inverse-Semigroup x))
+    outer-partial-inverse-law-Semigroup
+      ( semigroup-Inverse-Semigroup)
+      ( x)
       ( inv-Inverse-Semigroup x)
   outer-inverse-law-mul-Inverse-Semigroup x =
-    pr2 (pr2 (center (is-inverse-semigroup-Inverse-Semigroup x)))
+    is-outer-partial-inverse-partial-inverse-element-Semigroup
+      ( semigroup-Inverse-Semigroup)
+      ( partial-inverse-element-Inverse-Semigroup x)
 ```
